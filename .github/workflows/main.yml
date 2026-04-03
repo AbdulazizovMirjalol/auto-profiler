@@ -1,0 +1,23 @@
+name: AvtoCommit
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Har kuni o'zi ishlaydi
+  workflow_dispatch: # Bu qator bizga qo'lda sinab ko'rish imkonini beradi
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run script
+        run: python generator.py
+      - name: Save changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "actions@github.com"
+          git add .
+          git commit -m "Avto yangilanish"
+          git push
